@@ -1,3 +1,4 @@
-﻿C:\Program Files (x86)\MSBuild\14.0\bin\Microsoft.Common.CurrentVersion.targets(1611,5): warning : The referenced project '..\..\..\..\..\DirectXTK\DirectXTK_Desktop_2015.vcxproj' does not exist.
+﻿  Game.cpp
+c:\users\s162121\documents\gameengine\gameenginetk\gameenginetk\game.cpp(274): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   GameEngineTK.vcxproj -> C:\Users\s162121\Documents\GameEngine\GameEngineTK\Debug\GameEngineTK.exe
   GameEngineTK.vcxproj -> C:\Users\s162121\Documents\GameEngine\GameEngineTK\Debug\GameEngineTK.pdb (Full PDB)

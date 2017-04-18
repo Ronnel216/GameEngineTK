@@ -8,8 +8,16 @@
 extern void ExitGame();
 
 using namespace DirectX;
+using namespace::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
+
+// グローバル変数
+
+std::unique_ptr<PrimitiveBatch<VertexPositionColor>> primitiveBatch;
+
+std::unique_ptr<BasicEffect> basicEffect;
+ComPtr<ID3D11InputLayout> inputLayout;
 
 Game::Game() :
     m_window(0),
@@ -56,6 +64,8 @@ void Game::Update(DX::StepTimer const& timer)
 
     // TODO: Add your game logic here.
     elapsedTime;
+
+	// 毎フレーム処理をここに↓
 }
 
 // Draws the scene.
@@ -70,6 +80,29 @@ void Game::Render()
     Clear();
 
     // TODO: Add your rendering code here.
+
+	// 描画処理をここに↓
+
+	CommonStates states(m_d3dDevice.Get());
+	m_d3dContext->OMSetBlendState(states.Opaque(), nullptr, 0xFFFFFFFF);
+	m_d3dContext->OMSetDepthStencilState(states.DepthNone(), 0);
+	m_d3dContext->RSSetState(states.CullNone());
+
+	basicEffect->Apply(m_d3dContext.Get());
+	m_d3dContext->IASetInputLayout(inputLayout.Get());
+
+	primitiveBatch->Begin();
+	primitiveBatch->DrawLine(
+		VertexPositionColor(
+			Vector3(0, 0, 0),
+			Color(1, 1, 1)
+		),
+		VertexPositionColor(
+			Vector3(640, 480, 0),
+			Color(1, 1, 1)
+		)
+	);
+	primitiveBatch->End();
 
     Present();
 }
@@ -230,6 +263,27 @@ void Game::CreateDevice()
         (void)m_d3dContext.As(&m_d3dContext1);
 
     // TODO: Initialize device dependent objects here (independent of window size).
+
+	// 初期化処理はここに↓
+
+	primitiveBatch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(m_d3dContext.Get());
+
+	basicEffect = std::make_unique<BasicEffect>(m_d3dDevice.Get());
+
+	basicEffect->SetProjection(XMMatrixOrthographicOffCenterRH(0,
+		m_outputWidth, m_outputHeight, 0, 0, 1));
+	basicEffect->SetVertexColorEnabled(true);
+
+	void const* shaderByteCode;
+	size_t byteCodeLength;
+
+	basicEffect->GetVertexShaderBytecode(&shaderByteCode, &byteCodeLength);
+
+	m_d3dDevice->CreateInputLayout(VertexPositionColor::InputElements,
+		VertexPositionColor::InputElementCount,
+		shaderByteCode, byteCodeLength,
+		inputLayout.GetAddressOf());
+
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
