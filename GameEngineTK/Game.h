@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "DebugCamera.h"
 #include "StepTimer.h"
 #include <PrimitiveBatch.h>
 #include <VertexTypes.h>
@@ -66,4 +67,28 @@ private:
 
     // Rendering loop timer.
     DX::StepTimer                                   m_timer;
+
+private:
+	// Primitiveバッチ
+	//std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> m_batch;
+	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionNormal>> m_batch;
+
+	// エフェクト
+	std::unique_ptr<DirectX::BasicEffect> m_effect;
+	// 入力レイアウト
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_inputLayout;
+	// 汎用ステート設定
+	std::unique_ptr<DirectX::CommonStates> m_states;
+
+	// 行列
+	// ワールド
+	DirectX::SimpleMath::Matrix m_world;
+	// ビュー
+	DirectX::SimpleMath::Matrix m_view;
+	// プロジェクション
+	DirectX::SimpleMath::Matrix m_proj;
+
+	// デバッグカメラ
+
+	std::unique_ptr<DebugCamera> m_debugCamera;
 };
