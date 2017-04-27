@@ -77,6 +77,7 @@ void Game::Initialize(HWND window, int width, int height)
 	// モデルの生成
 	m_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\Ground.cmo", *m_factory);
 	m_skyDoomModel = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\SkyDoom.cmo", *m_factory);
+	m_bossModel = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\Boss.cmo", *m_factory);
 }
 
 // Executes the basic game loop.
@@ -101,6 +102,29 @@ void Game::Update(DX::StepTimer const& timer)
 	// 毎フレーム処理をここに↓
 
 	m_debugCamera->Update();
+
+
+	// ワールド行列を計算
+	// スケーリング
+	Matrix scalemat = Matrix::CreateScale(2.0f);
+
+	// 変換関数
+	XMConvertToRadians(45.0f);
+	// ロール
+	Matrix rotmatz = Matrix::CreateRotationZ(XM_PIDIV4);
+	// ピッチ(仰角)
+	Matrix rotmatx = Matrix::CreateRotationX(XM_PIDIV4);
+	// ヨー(方位角)
+	Matrix rotmaty = Matrix::CreateRotationY(XM_PIDIV4);
+	
+	// 回転行列の合成
+	Matrix rotmat = rotmatz * rotmatx * rotmaty;
+
+	// 平行移動
+	Matrix transmat = Matrix::CreateTranslation(20.f, 0.f, 0.f);
+	
+	// ワールド行列の合成(SRT)
+	m_worldBoss = scalemat * rotmat * transmat;
 }
 
 // Draws the scene.
@@ -158,7 +182,7 @@ void Game::Render()
 	// モデルの描画
 	m_model->Draw(m_d3dContext.Get(), *m_states, m_world, m_view, m_proj);
 	m_skyDoomModel->Draw(m_d3dContext.Get(), *m_states, m_world, m_view, m_proj);
-
+	m_bossModel->Draw(m_d3dContext.Get(), *m_states, m_worldBoss, m_view, m_proj);
 	m_batch->Begin();
 	//m_batch->DrawLine(
 	//	VertexPositionColor(

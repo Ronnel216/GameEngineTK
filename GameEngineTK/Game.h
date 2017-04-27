@@ -99,4 +99,8 @@ private:
 	// モデル
 	std::unique_ptr<DirectX::Model> m_model;
 	std::unique_ptr<DirectX::Model> m_skyDoomModel;
+	std::unique_ptr<DirectX::Model> m_bossModel;
+
+	// 球のワールド行列
+	DirectX::SimpleMath::Matrix m_worldBoss;
 };

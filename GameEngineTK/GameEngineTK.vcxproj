@@ -78,6 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\DirectXTK\Inc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -192,9 +193,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Ground.max" />
-  </ItemGroup>
-  <ItemGroup>
+    <MeshContentTask Include="Assets\Boss.FBX" />
     <MeshContentTask Include="Assets\Ground.FBX" />
     <MeshContentTask Include="Assets\SkyDoom.FBX" />
   </ItemGroup>

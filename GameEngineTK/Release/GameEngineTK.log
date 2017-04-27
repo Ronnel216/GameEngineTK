@@ -1,9 +1,11 @@
-﻿  pch.cpp
-  Game.cpp
-  Main.cpp
-     ライブラリ C:\Users\s162121\Documents\GameEngineTK\Release\GameEngineTK.lib とオブジェクト C:\Users\s162121\Documents\GameEngineTK\Release\GameEngineTK.exp を作成中
+﻿  Assets\Boss.FBX
+  Assets\Ground.FBX
+  Assets\SkyDoom.FBX
+     ライブラリ C:\Users\s162121\Documents\GameEngine\GameEngineTK\Release\GameEngineTK.lib とオブジェクト C:\Users\s162121\Documents\GameEngine\GameEngineTK\Release\GameEngineTK.exp を作成中
   コード生成しています。
-  All 165 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  0 of 426 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
-  GameEngineTK.vcxproj -> C:\Users\s162121\Documents\GameEngineTK\Release\GameEngineTK.exe
-  GameEngineTK.vcxproj -> C:\Users\s162121\Documents\GameEngineTK\Release\GameEngineTK.pdb (Full PDB)
+  GameEngineTK.vcxproj -> C:\Users\s162121\Documents\GameEngine\GameEngineTK\Release\GameEngineTK.exe
+  GameEngineTK.vcxproj -> C:\Users\s162121\Documents\GameEngine\GameEngineTK\Release\GameEngineTK.pdb (Full PDB)
