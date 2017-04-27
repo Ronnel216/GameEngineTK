@@ -4,13 +4,14 @@
 
 #pragma once
 
-#include "DebugCamera.h"
-#include "StepTimer.h"
+#include <Model.h>
 #include <PrimitiveBatch.h>
 #include <VertexTypes.h>
 #include <Effects.h>
 #include <CommonStates.h>
 #include <SimpleMath.h>
+#include "DebugCamera.h"
+#include "StepTimer.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -91,4 +92,11 @@ private:
 	// デバッグカメラ
 
 	std::unique_ptr<DebugCamera> m_debugCamera;
+
+	// エフェクトファクトリー
+	std::unique_ptr<DirectX::EffectFactory> m_factory;
+
+	// モデル
+	std::unique_ptr<DirectX::Model> m_model;
+	std::unique_ptr<DirectX::Model> m_skyDoomModel;
 };

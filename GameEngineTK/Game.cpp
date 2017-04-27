@@ -69,6 +69,14 @@ void Game::Initialize(HWND window, int width, int height)
 
 	// デバッグカメラを生成
 	m_debugCamera = std::make_unique<DebugCamera>(m_outputWidth, m_outputHeight);
+
+	// エフェクトファクトリ生成
+	m_factory = std::make_unique<EffectFactory>(m_d3dDevice.Get());
+	// テクスチャパス指定
+	m_factory->SetDirectory(L"Resources");
+	// モデルの生成
+	m_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\Ground.cmo", *m_factory);
+	m_skyDoomModel = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\SkyDoom.cmo", *m_factory);
 }
 
 // Executes the basic game loop.
@@ -139,13 +147,17 @@ void Game::Render()
 	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,  // 視野角(上下方向 45なら　上に45 下に45)
 		float(m_outputWidth) / float(m_outputHeight), // アスペクト比 (画面の幅と高さの比率 この値を参考にオブジェクトを描画する)
 		0.1f,  // ニアクリップ
-		10.f); // ファークリップ
+		10000.f); // ファークリップ
 
 	// 行列をセット
 	m_effect->SetView(m_view);
 	m_effect->SetProjection(m_proj);
 	m_effect->Apply(m_d3dContext.Get());
 	m_d3dContext->IASetInputLayout(m_inputLayout.Get());
+
+	// モデルの描画
+	m_model->Draw(m_d3dContext.Get(), *m_states, m_world, m_view, m_proj);
+	m_skyDoomModel->Draw(m_d3dContext.Get(), *m_states, m_world, m_view, m_proj);
 
 	m_batch->Begin();
 	//m_batch->DrawLine(
