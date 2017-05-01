@@ -10,6 +10,7 @@
 #include <Effects.h>
 #include <CommonStates.h>
 #include <SimpleMath.h>
+#include "Class\Object3D.h"
 #include "DebugCamera.h"
 #include "StepTimer.h"
 
@@ -36,7 +37,11 @@ public:
 
     // Properties
     void GetDefaultSize( int& width, int& height ) const;
-
+	
+	// パーツの個数
+	static const int NUM_PART = 20;
+	// 床の枚数
+	static const int NUM_FLOOR = 200;
 private:
 
     void Update(DX::StepTimer const& timer);
@@ -103,4 +108,11 @@ private:
 
 	// 球のワールド行列
 	DirectX::SimpleMath::Matrix m_worldBoss;
+
+	// 3Dオブジェクト(ボスっぽいやつの)
+	std::unique_ptr<Object3D> m_obj[NUM_PART];
+
+
+	// 床
+	std::unique_ptr<Object3D> m_floor[NUM_FLOOR][NUM_FLOOR];
 };
