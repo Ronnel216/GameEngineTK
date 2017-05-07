@@ -78,17 +78,20 @@ void Game::Initialize(HWND window, int width, int height)
 	m_model = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\Ground.cmo", *m_factory);
 	m_skyDoomModel = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\SkyDoom.cmo", *m_factory);
 	m_bossModel = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\Boss.cmo", *m_factory);
-
+	m_groud = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\Ground200m.cmo", *m_factory);
+	m_potModel = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\Pot.cmo", *m_factory);
 	// 3Dオブジェクトの作成
 	for (int i = 0; i < NUM_PART; i++)
 		m_obj[i] = std::make_unique<Object3D>(*Object3D::Create(*m_bossModel));
 
-	for (int i = 0; i < NUM_FLOOR; i++) {
-		for (int j = 0; j < NUM_FLOOR; j++) {
-			m_floor[i][j] = std::make_unique<Object3D>(*Object3D::Create(*m_model));
-		}
-	}
-
+	//for (int i = 0; i < NUM_FLOOR; i++) {
+	//	for (int j = 0; j < NUM_FLOOR; j++) {
+	//		m_floor[i][j] = std::make_unique<Object3D>(*Object3D::Create(*m_model));
+	//	}
+	//}
+	m_bFloor = std::make_unique<Object3D>(*Object3D::Create(*m_groud));
+	for (int i =0; i < NUM_POT; i++)
+	m_pot[i] = std::make_unique<Object3D>(*Object3D::Create(*m_potModel));
 	// 円形に配置
 	for (int i = 0; i < NUM_PART; i++) {
 		float radius = 20.0f;
@@ -109,12 +112,21 @@ void Game::Initialize(HWND window, int width, int height)
 		}
 	}
 
-	// 敷き詰める
-	for (int i = 0; i < NUM_FLOOR; i++) {
-		const int half = NUM_FLOOR / 2;
-		for (int j = 0; j < NUM_FLOOR; j++) {
-			m_floor[i][j]->world(Vector3(i - half, 0.f, j - half));
-		}
+	//// 敷き詰める
+	//for (int i = 0; i < NUM_FLOOR; i++) {
+	//	const int half = NUM_FLOOR / 2;
+	//	for (int j = 0; j < NUM_FLOOR; j++) {
+	//		m_floor[i][j]->world(Vector3(i - half, 0.f, j - half));
+	//	}
+	//}
+
+	// ポット初期配置
+	for (int i = 0; i < NUM_POT; i++) {
+		float rota = XM_2PI / NUM_POT;
+		static float radian = 0.f;
+		radian += rota;
+		//m_pot[i]->world(Vector3(sinf(rota), cosf(rota), 0.f));
+
 	}
 }
 
@@ -165,20 +177,20 @@ void Game::Update(DX::StepTimer const& timer)
 	m_worldBoss = scalemat * rotmat * transmat;
 
 	// 回転処理
-	// 円形に配置
-	for (int i = 0; i < NUM_PART; i++) {
-		const float rota = 0.01f;
-		float radius = 20.0f;
-		int half = NUM_PART / 2;
+	//// 円形に配置
+	//for (int i = 0; i < NUM_PART; i++) {
+	//	const float rota = 0.01f;
+	//	float radius = 20.0f;
+	//	int half = NUM_PART / 2;
 
-		// 内側
-		if (i < half) {
-			m_obj[i]->world(Matrix::CreateRotationY(rota));
-		} // 外側
-		else {
-			m_obj[i]->world(Matrix::CreateRotationY(-rota));
-		}
-	}
+	//	// 内側
+	//	if (i < half) {
+	//		m_obj[i]->world(Matrix::CreateRotationY(rota));
+	//	} // 外側
+	//	else {
+	//		m_obj[i]->world(Matrix::CreateRotationY(-rota));
+	//	}
+	//}
 }
 
 // Draws the scene.
@@ -238,12 +250,16 @@ void Game::Render()
 	m_skyDoomModel->Draw(m_d3dContext.Get(), *m_states, m_world, m_view, m_proj);
 	for (int i = 0; i < NUM_PART; i++)
 		m_obj[i]->model().Draw(m_d3dContext.Get(), *m_states, m_obj[i]->world(), m_view, m_proj);
-	for (int i = 0; i < NUM_FLOOR; i++) {
-		for (int j = 0; j < NUM_FLOOR; j++) {
-			m_floor[i][j]->model().Draw(m_d3dContext.Get(), *m_states, m_floor[i][j]->world(), m_view, m_proj);
-		}
-	}
-	m_obj[0]->model().Draw(m_d3dContext.Get(), *m_states, Matrix::Identity * Matrix::CreateScale(1.5f), m_view, m_proj);
+	//for (int i = 0; i < NUM_FLOOR; i++) {
+	//	for (int j = 0; j < NUM_FLOOR; j++) {
+	//		m_floor[i][j]->model().Draw(m_d3dContext.Get(), *m_states, m_floor[i][j]->world(), m_view, m_proj);
+	//	}
+	//}
+	
+	m_bFloor->model().Draw(m_d3dContext.Get(), *m_states, Matrix::Identity, m_view, m_proj);
+	//m_obj[0]->model().Draw(m_d3dContext.Get(), *m_states, Matrix::Identity * Matrix::CreateScale(1.5f), m_view, m_proj);
+	for (int i =0;i<NUM_POT;i++)
+	m_pot[i]->model().Draw(m_d3dContext.Get(), *m_states, Matrix::Identity * Matrix::CreateScale(1.f), m_view, m_proj);
 	//m_bossModel->Draw(m_d3dContext.Get(), *m_states, m_worldBoss, m_view, m_proj);
 	m_batch->Begin();
 	//m_batch->DrawLine(

@@ -42,6 +42,8 @@ public:
 	static const int NUM_PART = 20;
 	// 床の枚数
 	static const int NUM_FLOOR = 200;
+	// ポットの数
+	static const int NUM_POT = 20;
 private:
 
     void Update(DX::StepTimer const& timer);
@@ -105,6 +107,8 @@ private:
 	std::unique_ptr<DirectX::Model> m_model;
 	std::unique_ptr<DirectX::Model> m_skyDoomModel;
 	std::unique_ptr<DirectX::Model> m_bossModel;
+	std::unique_ptr<DirectX::Model> m_groud;
+	std::unique_ptr<DirectX::Model> m_potModel;
 
 	// 球のワールド行列
 	DirectX::SimpleMath::Matrix m_worldBoss;
@@ -115,4 +119,10 @@ private:
 
 	// 床
 	std::unique_ptr<Object3D> m_floor[NUM_FLOOR][NUM_FLOOR];
+
+	// 巨大床
+	std::unique_ptr<Object3D> m_bFloor;
+
+	// ポット
+	std::unique_ptr<Object3D> m_pot[NUM_POT];
 };
