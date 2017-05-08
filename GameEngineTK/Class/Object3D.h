@@ -39,7 +39,14 @@ public:
 	// 描画
 	void Render() const;
 
-	// ワールド座標
+	// 平行移動
+	DirectX::SimpleMath::Vector3 pos;
+	// 回転行列
+	DirectX::SimpleMath::Matrix rota;
+	// 拡大縮小
+	DirectX::SimpleMath::Matrix scale;
+
+	// ワールド行列
 	const DirectX::SimpleMath::Matrix& world() const {
 		return _world;
 	}

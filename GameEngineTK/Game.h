@@ -10,6 +10,7 @@
 #include <Effects.h>
 #include <CommonStates.h>
 #include <SimpleMath.h>
+#include <Keyboard.h>
 #include "Class\Object3D.h"
 #include "DebugCamera.h"
 #include "StepTimer.h"
@@ -109,6 +110,7 @@ private:
 	std::unique_ptr<DirectX::Model> m_bossModel;
 	std::unique_ptr<DirectX::Model> m_groud;
 	std::unique_ptr<DirectX::Model> m_potModel;
+	std::unique_ptr<DirectX::Model> m_headModel;
 
 	// 球のワールド行列
 	DirectX::SimpleMath::Matrix m_worldBoss;
@@ -125,4 +127,10 @@ private:
 
 	// ポット
 	std::unique_ptr<Object3D> m_pot[NUM_POT];
+
+	// 頭
+	std::unique_ptr<Object3D> m_head;
+
+	// キーボード
+	std::unique_ptr<DirectX::Keyboard> keyboard;
 };

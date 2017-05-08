@@ -80,6 +80,7 @@ void Game::Initialize(HWND window, int width, int height)
 	m_bossModel = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\Boss.cmo", *m_factory);
 	m_groud = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\Ground200m.cmo", *m_factory);
 	m_potModel = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\Pot.cmo", *m_factory);
+	m_headModel = Model::CreateFromCMO(m_d3dDevice.Get(), L"Resources\\Head.cmo", *m_factory);
 	// 3Dオブジェクトの作成
 	for (int i = 0; i < NUM_PART; i++)
 		m_obj[i] = std::make_unique<Object3D>(*Object3D::Create(*m_bossModel));
@@ -90,8 +91,14 @@ void Game::Initialize(HWND window, int width, int height)
 	//	}
 	//}
 	m_bFloor = std::make_unique<Object3D>(*Object3D::Create(*m_groud));
+
+	m_head = std::make_unique<Object3D>(*Object3D::Create(*m_headModel));
+
 	for (int i =0; i < NUM_POT; i++)
 	m_pot[i] = std::make_unique<Object3D>(*Object3D::Create(*m_potModel));
+
+	keyboard = std::make_unique < DirectX::Keyboard > ();
+
 	// 円形に配置
 	for (int i = 0; i < NUM_PART; i++) {
 		float radius = 20.0f;
@@ -125,9 +132,11 @@ void Game::Initialize(HWND window, int width, int height)
 		float rota = XM_2PI / NUM_POT;
 		static float radian = 0.f;
 		radian += rota;
-		m_pot[i]->world(Vector3(sinf(radian) * (rand() % 90 + 10), 0.f, cosf(radian) * (rand() % 90 + 10)));
-
+		//m_pot[i]->world(Vector3(sinf(radian) * (rand() % 90 + 10), 0.f, cosf(radian) * (rand() % 90 + 10)));
+		m_pot[i]->pos = 
+			Vector3(sinf(radian) * (rand() % 90 + 10), 0.f, cosf(radian) * (rand() % 90 + 10));
 	}
+
 }
 
 // Executes the basic game loop.
@@ -153,7 +162,31 @@ void Game::Update(DX::StepTimer const& timer)
 
 	m_debugCamera->Update();
 
+	auto kb = keyboard->GetState();
+	Vector3 moveV(0, 0, 0.f);
+	if (kb.W) {
+		// 移動ベクトル(Z座標前進)
+		moveV = Vector3(0, 0, -0.1f);
+	}
+	if (kb.S) {
+		// 移動ベクトル(Z座標後退)
+		moveV = Vector3(0, 0, 0.1f);
 
+	}
+	if (kb.A) {
+		// 左旋回
+		m_head->rota *= Matrix::CreateRotationY(0.1f);
+	}
+	if (kb.D) {
+		// 右旋回
+		m_head->rota *= Matrix::CreateRotationY(-0.1f);
+	}
+	moveV = Vector3::TransformNormal(moveV, m_head->rota);
+	m_head->pos += moveV;
+
+	{ // 自機のワールド行列を更新
+		m_head->world(m_head->rota * Matrix::CreateTranslation(m_head->pos));
+	}
 	// ワールド行列を計算
 	// スケーリング
 	Matrix scalemat = Matrix::CreateScale(2.0f);
@@ -176,13 +209,32 @@ void Game::Update(DX::StepTimer const& timer)
 	// ワールド行列の合成(SRT)
 	m_worldBoss = scalemat * rotmat * transmat;
 
-	// その場で回転
-	for (int i = 0; i < NUM_POT; i++) {
-		float rota = XM_2PI / 120;
-		Matrix mat = Matrix::CreateRotationY(rota) * m_pot[i]->world();
-		m_pot[i]->world(mat);
-	}
+	auto Lerp = [](Vector3 v0, Vector3 v1, float t){
+		Vector3 vt = ((v1 - v0) * t) + v0;
+		return vt;
+	};
 
+	// その場で回転 拡大縮小を繰り返す
+	static float radian = 0.f;
+	float rota = XM_2PI / 120;
+	float scale = (sinf(radian) + 1) * 2 + 1;
+	radian += rota;
+	static float step = 0.0f;
+	static Vector3 firstpos[NUM_POT];
+	static bool fl = true;
+	step = step < 1.0f ? step += 1.0f / (60 * 10) : 1.f;
+	for (int i = 0; i < NUM_POT; i++) {
+		if (fl) {
+			firstpos[i] = m_pot[i]->pos;
+		}
+		m_pot[i]->rota *= Matrix::CreateRotationY(rota);
+		m_pot[i]->scale = Matrix::CreateScale(scale);
+		//
+		m_pot[i]->pos = Lerp(firstpos[i], Vector3().Zero, step);
+		m_pot[i]->world(m_pot[i]->scale * m_pot[i]->rota * Matrix::CreateTranslation(m_pot[i]->pos));
+	}		
+	fl = false;
+	
 	// 回転処理
 	//// 円形に配置
 	//for (int i = 0; i < NUM_PART; i++) {
@@ -266,8 +318,10 @@ void Game::Render()
 	m_bFloor->model().Draw(m_d3dContext.Get(), *m_states, Matrix::Identity, m_view, m_proj);
 	//m_obj[0]->model().Draw(m_d3dContext.Get(), *m_states, Matrix::Identity * Matrix::CreateScale(1.5f), m_view, m_proj);
 	for (int i = 0; i < NUM_POT; i++)
-		m_pot[i]->model().Draw(m_d3dContext.Get(), *m_states, m_pot[i]->world() * Matrix::CreateScale(1.f), m_view, m_proj);
+		//m_pot[i]->model().Draw(m_d3dContext.Get(), *m_states, m_pot[i]->world(), m_view, m_proj);
 	//m_bossModel->Draw(m_d3dContext.Get(), *m_states, m_worldBoss, m_view, m_proj);
+		;
+	m_head->model().Draw(m_d3dContext.Get(), *m_states, m_head->world(), m_view, m_proj);
 	m_batch->Begin();
 	//m_batch->DrawLine(
 	//	VertexPositionColor(

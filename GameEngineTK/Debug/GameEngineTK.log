@@ -1,6 +1,7 @@
 ﻿  Assets\Boss.FBX
   Assets\Ground.FBX
   Assets\Ground200m.FBX
+  Assets\Head.FBX
   Assets\Pot.FBX
   Assets\SkyDoom.FBX
   Game.cpp
