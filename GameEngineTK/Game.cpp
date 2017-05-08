@@ -293,6 +293,7 @@ void Game::Render()
 	// デバッグカメラから行列をビュー行列を取得
 	m_view = m_debugCamera->GetCameraMatrix();
 
+
 	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,  // 視野角(上下方向 45なら　上に45 下に45)
 		float(m_outputWidth) / float(m_outputHeight), // アスペクト比 (画面の幅と高さの比率 この値を参考にオブジェクトを描画する)
 		0.1f,  // ニアクリップ
