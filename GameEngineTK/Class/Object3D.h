@@ -47,7 +47,7 @@ public:
 		_world = DirectX::SimpleMath::Matrix::CreateTranslation(pos);
 	}
 	void world(DirectX::SimpleMath::Matrix matrix) {
-		_world *= matrix;
+		_world = matrix;
 	}
 
 	// モデルデータ

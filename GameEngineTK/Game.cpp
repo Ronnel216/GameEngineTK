@@ -125,7 +125,7 @@ void Game::Initialize(HWND window, int width, int height)
 		float rota = XM_2PI / NUM_POT;
 		static float radian = 0.f;
 		radian += rota;
-		//m_pot[i]->world(Vector3(sinf(rota), cosf(rota), 0.f));
+		m_pot[i]->world(Vector3(sinf(radian) * (rand() % 90 + 10), 0.f, cosf(radian) * (rand() % 90 + 10)));
 
 	}
 }
@@ -175,6 +175,13 @@ void Game::Update(DX::StepTimer const& timer)
 	
 	// ワールド行列の合成(SRT)
 	m_worldBoss = scalemat * rotmat * transmat;
+
+	// その場で回転
+	for (int i = 0; i < NUM_POT; i++) {
+		float rota = XM_2PI / 120;
+		Matrix mat = Matrix::CreateRotationY(rota) * m_pot[i]->world();
+		m_pot[i]->world(mat);
+	}
 
 	// 回転処理
 	//// 円形に配置
@@ -248,8 +255,8 @@ void Game::Render()
 	// モデルの描画
 	//m_model->Draw(m_d3dContext.Get(), *m_states, m_world, m_view, m_proj);
 	m_skyDoomModel->Draw(m_d3dContext.Get(), *m_states, m_world, m_view, m_proj);
-	for (int i = 0; i < NUM_PART; i++)
-		m_obj[i]->model().Draw(m_d3dContext.Get(), *m_states, m_obj[i]->world(), m_view, m_proj);
+	//for (int i = 0; i < NUM_PART; i++)
+	//	m_obj[i]->model().Draw(m_d3dContext.Get(), *m_states, m_obj[i]->world(), m_view, m_proj);
 	//for (int i = 0; i < NUM_FLOOR; i++) {
 	//	for (int j = 0; j < NUM_FLOOR; j++) {
 	//		m_floor[i][j]->model().Draw(m_d3dContext.Get(), *m_states, m_floor[i][j]->world(), m_view, m_proj);
@@ -258,8 +265,8 @@ void Game::Render()
 	
 	m_bFloor->model().Draw(m_d3dContext.Get(), *m_states, Matrix::Identity, m_view, m_proj);
 	//m_obj[0]->model().Draw(m_d3dContext.Get(), *m_states, Matrix::Identity * Matrix::CreateScale(1.5f), m_view, m_proj);
-	for (int i =0;i<NUM_POT;i++)
-	m_pot[i]->model().Draw(m_d3dContext.Get(), *m_states, Matrix::Identity * Matrix::CreateScale(1.f), m_view, m_proj);
+	for (int i = 0; i < NUM_POT; i++)
+		m_pot[i]->model().Draw(m_d3dContext.Get(), *m_states, m_pot[i]->world() * Matrix::CreateScale(1.f), m_view, m_proj);
 	//m_bossModel->Draw(m_d3dContext.Get(), *m_states, m_worldBoss, m_view, m_proj);
 	m_batch->Begin();
 	//m_batch->DrawLine(
