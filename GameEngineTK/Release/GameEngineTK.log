@@ -1,17 +1,18 @@
 ﻿  Assets\Boss.FBX
   Assets\Ground.FBX
   Assets\Ground200m.FBX
+  Assets\Head.FBX
   Assets\Pot.FBX
   Assets\SkyDoom.FBX
-  Object3D.cpp
+  Camera.cpp
   Game.cpp
 Game.cpp(54): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   Main.cpp
      ライブラリ C:\Users\s162121\Documents\GameEngine\GameEngineTK\Release\GameEngineTK.lib とオブジェクト C:\Users\s162121\Documents\GameEngine\GameEngineTK\Release\GameEngineTK.exp を作成中
   コード生成しています。
-  102 of 467 functions (21.8%) were compiled, the rest were copied from previous compilation.
-    6 functions were new in current compilation
-    11 functions had inline decision re-evaluated but remain unchanged
+  116 of 524 functions (22.1%) were compiled, the rest were copied from previous compilation.
+    58 functions were new in current compilation
+    24 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   GameEngineTK.vcxproj -> C:\Users\s162121\Documents\GameEngine\GameEngineTK\Release\GameEngineTK.exe
   GameEngineTK.vcxproj -> C:\Users\s162121\Documents\GameEngine\GameEngineTK\Release\GameEngineTK.pdb (Full PDB)

@@ -4,7 +4,6 @@
   Assets\Head.FBX
   Assets\Pot.FBX
   Assets\SkyDoom.FBX
-  Game.cpp
-c:\users\s162121\documents\gameengine\gameenginetk\gameenginetk\game.cpp(54): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+     ライブラリ C:\Users\s162121\Documents\GameEngine\GameEngineTK\Debug\GameEngineTK.lib とオブジェクト C:\Users\s162121\Documents\GameEngine\GameEngineTK\Debug\GameEngineTK.exp を作成中
   GameEngineTK.vcxproj -> C:\Users\s162121\Documents\GameEngine\GameEngineTK\Debug\GameEngineTK.exe
   GameEngineTK.vcxproj -> C:\Users\s162121\Documents\GameEngine\GameEngineTK\Debug\GameEngineTK.pdb (Full PDB)

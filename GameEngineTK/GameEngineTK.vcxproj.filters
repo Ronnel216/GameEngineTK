@@ -17,6 +17,7 @@
     <ClInclude Include="Class\Object3D.h">
       <Filter>Class</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -26,6 +27,7 @@
     <ClCompile Include="Class\Object3D.cpp">
       <Filter>Class</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

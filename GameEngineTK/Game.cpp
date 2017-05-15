@@ -136,7 +136,10 @@ void Game::Initialize(HWND window, int width, int height)
 		m_pot[i]->pos = 
 			Vector3(sinf(radian) * (rand() % 90 + 10), 0.f, cosf(radian) * (rand() % 90 + 10));
 	}
-
+	m_camera = std::make_unique<Camera>(m_outputWidth, m_outputHeight);
+	m_head->pos = Vector3(9, 0, 0);
+	m_camera->EyePos(Vector3(0.f, 1.f, -1.f));
+	m_camera->RefPos(m_head->pos);
 }
 
 // Executes the basic game loop.
@@ -159,18 +162,23 @@ void Game::Update(DX::StepTimer const& timer)
     elapsedTime;
 
 	// 毎フレーム処理をここに↓
-
+	m_camera->EyePos(m_head->pos + Vector3().TransformNormal(Vector3(0.f, 0.5f, -1.f), m_head->rota));
+	m_camera->RefPos(m_head->pos + Vector3().TransformNormal(Vector3(0.f, 0.f, 1.f), m_head->rota));
 	m_debugCamera->Update();
+	m_camera->Update();
+
+	m_view = m_camera->View();
+	//m_proj = m_camera
 
 	auto kb = keyboard->GetState();
 	Vector3 moveV(0, 0, 0.f);
 	if (kb.W) {
 		// 移動ベクトル(Z座標前進)
-		moveV = Vector3(0, 0, -0.1f);
+		moveV = Vector3(0, 0, 0.1f);
 	}
 	if (kb.S) {
 		// 移動ベクトル(Z座標後退)
-		moveV = Vector3(0, 0, 0.1f);
+		moveV = Vector3(0, 0, -0.1f);
 
 	}
 	if (kb.A) {
@@ -293,12 +301,33 @@ void Game::Render()
 	// デバッグカメラから行列をビュー行列を取得
 	m_view = m_debugCamera->GetCameraMatrix();
 
+	m_view = m_camera->View();
+	m_proj = m_camera->Proj();
+	//// 視点座標
+	//Vector3 eyepos(0.f, 0.f, 5.f);
+	//// 注視点 (参照点)
+	//Vector3 refpos(0.f, 0.f, 0.f);
+	//// カメラの上方向ベクトル
+	//Vector3 vpvec(1, -1, 0);
+	//vpvec.Normalize();
+	//// ビュー行列の作成
+	//m_view = Matrix::CreateLookAt(eyepos, refpos, vpvec);
 
-	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,  // 視野角(上下方向 45なら　上に45 下に45)
-		float(m_outputWidth) / float(m_outputHeight), // アスペクト比 (画面の幅と高さの比率 この値を参考にオブジェクトを描画する)
-		0.1f,  // ニアクリップ
-		10000.f); // ファークリップ
+	//float fovY = XMConvertToRadians(60.0f);
+	//// アスペクト比(横縦の比率)
+	//float aspect = (float)m_outputWidth / m_outputHeight;
+	//// ニアグリップ
+	//float nearClip = 0.1f;
+	//// ファークリップ
+	//float farClip = 1000.f;
 
+	//m_proj = Matrix::CreatePerspectiveFieldOfView(fovY, aspect, nearClip, farClip);
+
+	//m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,  // 視野角(上下方向 45なら　上に45 下に45)
+	//	float(m_outputWidth) / float(m_outputHeight), // アスペクト比 (画面の幅と高さの比率 この値を参考にオブジェクトを描画する)
+	//	0.1f,  // ニアクリップ
+	//	10000.f); // ファークリップ
+	
 				  // 行列をセット
 	m_effect->SetView(m_view);
 	m_effect->SetProjection(m_proj);
