@@ -15,7 +15,7 @@ public:
 	virtual ~Camera();
 
 	// 更新
-	void Update();
+	virtual void Update();
 
 
 	// ビュー行列を返す
@@ -29,25 +29,25 @@ public:
 	};
 
 	// 始点座標のセット
-	void EyePos(DirectX::SimpleMath::Vector3 eyePos){
+	void EyePos(const DirectX::SimpleMath::Vector3& eyePos){
 		this->eyePos = eyePos;
 	};
 
 	// 参照点のセット
-	void RefPos(DirectX::SimpleMath::Vector3 refPos) {
+	void RefPos(const DirectX::SimpleMath::Vector3& refPos) {
 		this->refPos = refPos;
 	};
 
 	// カメラの上方向ベクトル
-	void VpVec(DirectX::SimpleMath::Vector3 vpVec) {
+	void VpVec(const DirectX::SimpleMath::Vector3& vpVec) {
 		this->vpVec = vpVec;
 	};
 	// ビュー行列
-	void View(DirectX::SimpleMath::Matrix view) {
+	void View(const DirectX::SimpleMath::Matrix& view) {
 		this->view = view;
 	};
 	// プロジェクション行列
-	void Proj(DirectX::SimpleMath::Matrix proj) {
+	void Proj(const DirectX::SimpleMath::Matrix& proj) {
 		this->proj = proj;
 	};
 	// 視野角

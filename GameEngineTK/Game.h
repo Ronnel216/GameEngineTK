@@ -12,7 +12,7 @@
 #include <SimpleMath.h>
 #include <Keyboard.h>
 #include "Class\Object3D.h"
-#include "Camera.h"
+#include "FollowCamera.h"
 #include "DebugCamera.h"
 #include "StepTimer.h"
 
@@ -136,5 +136,5 @@ private:
 	std::unique_ptr<DirectX::Keyboard> keyboard;
 	
 	// ÉJÉÅÉâ
-	std::unique_ptr<Camera> m_camera;
+	std::unique_ptr<FollowCamera> m_camera;
 };

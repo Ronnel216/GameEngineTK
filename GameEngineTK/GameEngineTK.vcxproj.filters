@@ -18,6 +18,7 @@
       <Filter>Class</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="FollowCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -28,6 +29,7 @@
       <Filter>Class</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="FollowCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

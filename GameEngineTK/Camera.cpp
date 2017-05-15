@@ -16,9 +16,9 @@ Camera::Camera(int width, int height)
 	, view(Matrix::CreateLookAt(eyePos, refPos, vpVec))
 	, proj(Matrix::CreatePerspectiveFieldOfView(fovY, aspect, nearClip, farClip))
 {
-	// 初期状態の ビュー行列　プロジェクション行列 生成
-	view = Matrix::CreateLookAt(eyePos, refPos, vpVec);
-	proj = Matrix::CreatePerspectiveFieldOfView(fovY, aspect, nearClip, farClip);
+	//// 初期状態の ビュー行列　プロジェクション行列 生成
+	//view = Matrix::CreateLookAt(eyePos, refPos, vpVec);
+	//proj = Matrix::CreatePerspectiveFieldOfView(fovY, aspect, nearClip, farClip);
 
 }
 

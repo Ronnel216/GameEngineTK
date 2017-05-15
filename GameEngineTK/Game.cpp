@@ -136,7 +136,7 @@ void Game::Initialize(HWND window, int width, int height)
 		m_pot[i]->pos = 
 			Vector3(sinf(radian) * (rand() % 90 + 10), 0.f, cosf(radian) * (rand() % 90 + 10));
 	}
-	m_camera = std::make_unique<Camera>(m_outputWidth, m_outputHeight);
+	m_camera = std::make_unique<FollowCamera>(m_outputWidth, m_outputHeight, m_head->pos, m_head->rota);
 	m_head->pos = Vector3(9, 0, 0);
 	m_camera->EyePos(Vector3(0.f, 1.f, -1.f));
 	m_camera->RefPos(m_head->pos);
@@ -162,8 +162,12 @@ void Game::Update(DX::StepTimer const& timer)
     elapsedTime;
 
 	// 毎フレーム処理をここに↓
-	m_camera->EyePos(m_head->pos + Vector3().TransformNormal(Vector3(0.f, 0.5f, -1.f), m_head->rota));
-	m_camera->RefPos(m_head->pos + Vector3().TransformNormal(Vector3(0.f, 0.f, 1.f), m_head->rota));
+
+	// 自機に追従するカメラ
+
+	m_camera->TargetPos(m_head->pos);
+	m_camera->TargetRota(m_head->rota);
+
 	m_debugCamera->Update();
 	m_camera->Update();
 
@@ -174,11 +178,11 @@ void Game::Update(DX::StepTimer const& timer)
 	Vector3 moveV(0, 0, 0.f);
 	if (kb.W) {
 		// 移動ベクトル(Z座標前進)
-		moveV = Vector3(0, 0, 0.1f);
+		moveV = Vector3(0, 0, -0.1f);
 	}
 	if (kb.S) {
 		// 移動ベクトル(Z座標後退)
-		moveV = Vector3(0, 0, -0.1f);
+		moveV = Vector3(0, 0, +0.1f);
 
 	}
 	if (kb.A) {
@@ -298,8 +302,8 @@ void Game::Render()
 	//	Vector3(0, 0, 0), //  カメラ参照点
 	//	Vector3(1, 0, 0)); // 画面上方向ベクトル
 
-	// デバッグカメラから行列をビュー行列を取得
-	m_view = m_debugCamera->GetCameraMatrix();
+	//// デバッグカメラから行列をビュー行列を取得
+	//m_view = m_debugCamera->GetCameraMatrix();
 
 	m_view = m_camera->View();
 	m_proj = m_camera->Proj();
